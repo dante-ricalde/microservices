@@ -1,6 +1,7 @@
 package com.example.ec.repo;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import com.example.ec.domain.TourPackage;
 
@@ -11,5 +12,6 @@ import com.example.ec.domain.TourPackage;
  */
 public interface TourPackageRepository extends CrudRepository<TourPackage, String> {
 	
-	TourPackage findByName(String name);
+	
+	TourPackage findByName(@Param(value = "name") String name);
 }
