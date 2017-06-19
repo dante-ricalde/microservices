@@ -1,0 +1,14 @@
+http://localhost:8080/tours?size=3&page=1&sort=title,asc
+	# I am going to receive a page from 3 tours
+	# page=1, it's going to give me the second page of tours
+	# sort=title,asc => I am going to sort by the title of the tour and alphabetically
+
+http://localhost:8080/tours/search/findByTourPackageCode?code=CC&size=2&sort=title,asc
+	# code=CC => for California Comm
+	# size=2 => two records, two tours
+	# We are not providing the page number, so by default will be zero
+	# sort=title,asc => I am going to sort by the title of the tour and alphabetically
+	
+# tourPackages endpoint, but instead of tourPackages, We are saying packages
+GET http://localhost:8080/packages/CC
+DELETE http://localhost:8080/packages/CC => We get 405 Method Not Allowed, which is a security level HTTP status code back
