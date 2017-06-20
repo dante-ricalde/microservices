@@ -12,3 +12,36 @@ http://localhost:8080/tours/search/findByTourPackageCode?code=CC&size=2&sort=tit
 # tourPackages endpoint, but instead of tourPackages, We are saying packages
 GET http://localhost:8080/packages/CC
 DELETE http://localhost:8080/packages/CC => We get 405 Method Not Allowed, which is a security level HTTP status code back
+
+
+http://localhost:8080/tours/1/ratings
+
+	POST
+		with this request body:
+				{
+				  "score": 5,
+				  "comment": "I thought it was great",
+				  "customerId":1
+				}
+			Content-Type: application/json
+			
+			We get HttpStatus created 201
+	
+		with this another request body:
+				{
+				  "score": 10,
+				  "comment": "I thought it was great",
+				  "customerId":1
+				}
+			
+			I get an status 400 Bad Request => "defaultMessage": "must be less than or equal to 5",
+		
+		With this another request body and the url http://localhost:8080/tours/99/ratings:
+			{
+			  "score": 5,
+			  "comment": "I thought it was great",
+			  "customerId":1
+			}
+			
+			I get an http status 404 NOT FOUND => Tour does not exists 99
+			and that's ok because there's only 30 tours in the db
