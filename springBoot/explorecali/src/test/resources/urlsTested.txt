@@ -34,7 +34,7 @@ http://localhost:8080/tours/1/ratings
 				  "customerId":1
 				}
 			
-			I get an status 400 Bad Request => "defaultMessage": "must be less than or equal to 5",
+			I get an status 400 Bad Request => "defaultMessage": "must be less than or equal to 5", The @Validation made its work
 		
 		With this another request body and the url http://localhost:8080/tours/99/ratings:
 			{
@@ -45,3 +45,99 @@ http://localhost:8080/tours/1/ratings
 			
 			I get an http status 404 NOT FOUND => Tour does not exists 99
 			and that's ok because there's only 30 tours in the db
+	
+http://localhost:8080/tours/1/ratings
+	[
+	    {
+	        "score": 5,
+	        "comment": "I thought it was great",
+	        "customerId": 1
+	    },
+	    {
+	        "score": 5,
+	        "comment": "I thought it was great",
+	        "customerId": 2
+	    },
+	    {
+	        "score": 3,
+	        "comment": "I thought it was great",
+	        "customerId": 3
+	    },
+	    {
+	        "score": 0,
+	        "comment": "I thought it was bad",
+	        "customerId": 4
+	    }
+	]
+	
+http://localhost:8080/tours/1/ratings/average
+	{
+	    "average": 3.25
+	}
+	
+PUT http://localhost:8080/tours/1/ratings
+	{
+	  "score": 0,
+	  "comment": "I thought it was OK",
+	  "customerId":4
+	}
+	
+PATCH http://localhost:8080/tours/1/ratings
+	{
+	  "score": 3,
+	  "customerId":4
+	}
+	
+GET http://localhost:8080/tours/1/ratings?size=3&page=1&sort=score,asc # This parameters give you the counts until the page requested
+	It's better to use Spring HATEOAS for that and for embedding hypermedia links
+	with page 0: totalPages": 1,
+			    "totalElements": 3,
+			    "last": true,
+			    "size": 3,
+			    
+	
+	with page1:
+	
+	{
+	    "content": [
+	        {
+	            "score": 3,
+	            "comment": "I thought it was bad",
+	            "customerId": 6
+	        },
+	        {
+	            "score": 3,
+	            "comment": "I thought it was bad",
+	            "customerId": 5
+	        },
+	        {
+	            "score": 3,
+	            "comment": "I thought it was bad",
+	            "customerId": 4
+	        }
+	    ],
+	    "totalPages": 2,
+	    "totalElements": 6,
+	    "last": true,
+	    "size": 3,
+	    "number": 1,
+	    "sort": [
+	        {
+	            "direction": "ASC",
+	            "property": "score",
+	            "ignoreCase": false,
+	            "nullHandling": "NATIVE",
+	            "ascending": true,
+	            "descending": false
+	        }
+	    ],
+	    "first": false,
+	    "numberOfElements": 3
+	}
+	
+	with page 2: 
+		 "totalPages": 3,
+	    "totalElements": 7,
+	    "last": true,
+	    "size": 3,
+	    "number": 2,

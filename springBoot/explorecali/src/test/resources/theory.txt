@@ -1,0 +1,17 @@
+PUT - update all non-key attributes
+	PUT http://localhost:8080/tours/1/ratings
+		{
+		  "score": 0,
+		  "comment": "I thought it was bad",
+		  "customerId":4
+		}
+		
+PATCH - update one or more non-key attributes
+	HTTP PATCH http://localhost:8080/tours/1/ratings
+		{
+		  "score": 0,
+		  "customerId":4
+		}
+
+DELETE http://localhost:8080/tours/1/ratings/4
+	200 OK
