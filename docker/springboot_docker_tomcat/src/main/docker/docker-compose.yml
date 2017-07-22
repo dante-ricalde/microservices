@@ -1,0 +1,6 @@
+version: '2'
+services:
+    tomcatwar:
+      image: dantericalde/springboot_docker_tomcat
+      ports:
+        - 8080

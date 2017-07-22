@@ -5,7 +5,7 @@
 
 	<groupId>com.mvp</groupId>
 	<artifactId>springboot_docker_tomcat</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<packaging>war</packaging>
 
 	<name>springboot_docker_tomcat</name>
@@ -22,12 +22,14 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+		<docker.image.prefix>dantericalde</docker.image.prefix>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -42,6 +44,40 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.4.11</version>
+				<configuration>
+					<imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+					<dockerDirectory>src/main/docker</dockerDirectory>
+<!-- 					<dockerHost>http://172.17.0.1:2375</dockerHost> -->
+<!-- In the tutorial the docker host is 172.17.0.1 (this is the IP that's actually running the docker host) because this is running 
+in the linux host, besides in this case this eclipse is running in a container and the docker host is not in this container,
+	is in the linux host
+-->					<dockerHost>172.17.0.1</dockerHost>
+					
+					<!-- override tags every time image is built with docker:build -->
+					<forceTags>true</forceTags>
+					<imageTags>
+						<imageTag>${project.version}</imageTag>
+						<imageTag>latest</imageTag>
+					</imageTags>
+					
+					<!-- You should do this in deploy phase or use -DskipDockerPush -->
+					<serverId>docker-hub</serverId>
+					<registryUrl>https://hub.docker.com/</registryUrl>
+					<noCache>true</noCache>
+					
+					<resources>
+						<resource>
+							<targetPath>/</targetPath><!-- This actually is target/docker, namely the src/main/docker contents and the generated war file are going to be copied to this directory target/docker -->
+							<directory>${project.build.directory}</directory>
+							<include>${project.build.finalName}.war</include>
+						</resource>
+					</resources>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

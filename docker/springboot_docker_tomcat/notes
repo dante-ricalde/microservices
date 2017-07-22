@@ -1,2 +1,42 @@
+Deploy Spring Boot WAR to Tomcat Docker Container
+=================================================
+Covers ...
+	- Run a Spring boot web application, deployed on remote Tomcat server
+	- Netbeans IDE in Docker Container
+	- Maven spotify plugin will build the image
+		- Dockerfile
+		- push image onto Docker Hub repository (mvpjava/)
+
+- Outgoing Points ...
+
 https://www.youtube.com/watch?v=6vjo3pMXW7I
 I left at: 7:22
+
+to build the image, locate in the dir project and execute:
+	mvn clean package docker:build -DskipDockerPush
+
+to build the image, locate at target/docker,  first I needed to copy the dir src/main/docker
+in this dir, in this dir it's needed the DockerFile and the generated war form target
+
+	docker build -t mvpjava/springboot_docker_tomcat:1.0 .
+	
+	to create an images with several tags
+		docker build -t dantericalde/springboot_docker_tomcat:1.0 -t dantericalde/springboot_docker_tomcat:latest .
+	
+# I have done this because the spotigy plugin gives me an error building the image, and I didn't have time to fix it
+
+to run the image
+	docker run --rm --name dockerwar -p 8080 -d mvpjava/springboot_docker_tomcat:1.0
+
+interact with the docker container using sh
+	docker exec -it dockerwar sh
+execute ifconfig in the prompt to see the ip addresses
+	ifconfig
+	I use the first address 172.17.0.2
+
+to test the app
+	http://172.17.0.2:8080/home
+	
+to execute with docker-compose:
+	~/microservices/docker/springboot_docker_tomcat/src/main/docker$ docker-compose up -d
+	http://172.20.0.2:8080/home
