@@ -1,5 +1,6 @@
-package com.mvp.springboot_docker_tomcat;
+package com.mvpjava;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -11,10 +12,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SpringbootDockerTomcatApplication extends SpringBootServletInitializer {
 	
+	@Autowired
+	MongoService mongoLoggerService;
+	
+	@RequestMapping("/")
+	public String home() {
+		mongoLoggerService.logToMongo(new LogRecord("INFO", "New Home page hit"));
+		return "Spring Boot war deployment in Tomcat Docker Container successfull <P>" + 
+				mongoLoggerService.getMongoDbInfo();
+	}
+	
+	/*
 	@RequestMapping("/home")
 	public String home() {
 		return "Spring Boot war deployment in Tomcat Docker Container successfull";
+	}*/
+	
+	@RequestMapping("/hits")
+	public String getHomePageHits() {
+		long homePageHitCount = mongoLoggerService.getHomePageHitCount();
+		return "The Home page has been hit " + homePageHitCount + " times";
 	}
+	
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringbootDockerTomcatApplication.class, args);
@@ -22,6 +41,6 @@ public class SpringbootDockerTomcatApplication extends SpringBootServletInitiali
 	
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-		return builder.sources(SpringbootDockerTomcatApplication.class);
+		return builder.sources(SpringbootDockerTomcatApplication.class); // web.xml
 	}
 }

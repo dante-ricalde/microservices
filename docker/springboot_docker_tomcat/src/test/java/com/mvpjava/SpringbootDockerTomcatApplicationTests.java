@@ -1,4 +1,4 @@
-package com.mvp.springboot_docker_tomcat;
+package com.mvpjava;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

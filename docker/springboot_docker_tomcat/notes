@@ -40,3 +40,10 @@ to test the app
 to execute with docker-compose:
 	~/microservices/docker/springboot_docker_tomcat/src/main/docker$ docker-compose up -d
 	http://172.20.0.2:8080/home
+
+23/07/2016
+	https://www.youtube.com/watch?v=XojJV0A3cBw
+	I have left at 18:45 min.
+	I built the image with the spotify plugin
+		mvn clean package docker:build -DskipTests -DskipDockerPush -X
+	And I need to work with docker-compose to configure and start the containers
