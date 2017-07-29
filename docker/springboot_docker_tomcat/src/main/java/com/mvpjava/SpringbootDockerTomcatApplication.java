@@ -18,7 +18,7 @@ public class SpringbootDockerTomcatApplication extends SpringBootServletInitiali
 	@RequestMapping("/")
 	public String home() {
 		mongoLoggerService.logToMongo(new LogRecord("INFO", "New Home page hit"));
-		return "Spring Boot war deployment in Tomcat Docker Container successfull <P>" + 
+		return "Spring Boot war 2 deployment in Tomcat Docker Container successfull <P>" + 
 				mongoLoggerService.getMongoDbInfo();
 	}
 	

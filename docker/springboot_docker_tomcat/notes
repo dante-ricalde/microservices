@@ -13,7 +13,7 @@ https://www.youtube.com/watch?v=6vjo3pMXW7I
 I left at: 7:22
 
 to build the image, locate in the dir project and execute:
-	mvn clean package docker:build -DskipDockerPush
+	mvn clean package docker:build -DskipDockerPush or (mvn clean package docker:build)
 
 to build the image, locate at target/docker,  first I needed to copy the dir src/main/docker
 in this dir, in this dir it's needed the DockerFile and the generated war form target
@@ -41,9 +41,16 @@ to execute with docker-compose:
 	~/microservices/docker/springboot_docker_tomcat/src/main/docker$ docker-compose up -d
 	http://172.20.0.2:8080/home
 
-23/07/2016
+23/07/2017
 	https://www.youtube.com/watch?v=XojJV0A3cBw
 	I have left at 18:45 min.
 	I built the image with the spotify plugin
 		mvn clean package docker:build -DskipTests -DskipDockerPush -X
 	And I need to work with docker-compose to configure and start the containers
+	
+29/07/2017
+	to stop and remove the containers and for removing the volumes (so that )no volumes stay connected to containers that are down
+	docker-compose down -v (= docker-compose stop + docker-compose rm -vf (f means force)
+	
+	to see the logs with a tail
+	docker-compose logs -f tomcatserver

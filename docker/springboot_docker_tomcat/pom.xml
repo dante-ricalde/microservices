@@ -62,7 +62,7 @@ in the linux host, besides in this case this eclipse is running in a container a
 	is in the linux host
 -->			<!-- 		I don't need to specify this localhost so that it takes the default docker host configuration...
 						I was getting an error because the daemon was not started at the port 2375 instead I think the daemon was started
-						with the unix protocol but I didn't see the port, besides this plugin throws an error when you try to specify a tcp protocol
+						with the unix socket protocol but I didn't see the port, besides this plugin throws an error when you try to specify a tcp protocol
 						for the dockerHost, I think that if you specify unix protocol you will get the same error.
 					<dockerHost>http://172.17.0.1:2375</dockerHost> -->
 					
