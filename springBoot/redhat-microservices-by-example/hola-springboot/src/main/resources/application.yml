@@ -1,0 +1,6 @@
+helloapp.saying:  Guten Tag aus
+management.security.enabled: false
+
+greeting.saying: Hola Spring Boot
+greeting.backendServiceHost: localhost
+greeting.backendServicePort: 8080
