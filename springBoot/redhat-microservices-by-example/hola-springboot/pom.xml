@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.redhat.examples</groupId>
@@ -37,32 +38,35 @@
 	</properties>
 
 	<profiles>
-    <profile>
-      <id>f8-build</id>
-      <build>
-        <defaultGoal>clean install docker:build fabric8:json</defaultGoal>
-      </build>
-    </profile>
-    <profile>
-      <id>f8-deploy</id>
-      <build>
-        <defaultGoal>clean install docker:build docker:push fabric8:json fabric8:apply</defaultGoal>
-      </build>
-      <properties>
-        <fabric8.recreate>true</fabric8.recreate>
-        <fabric8.imagePullPolicySnapshot>Always</fabric8.imagePullPolicySnapshot>
-      </properties>
-    </profile>
-    <profile>
-      <id>f8-local-deploy</id>
-      <build>
-        <defaultGoal>clean install docker:build fabric8:json fabric8:apply</defaultGoal>
-      </build>
-      <properties>
-        <fabric8.recreate>true</fabric8.recreate>
-      </properties>
-    </profile>
-  </profiles>
+		<profile>
+			<id>f8-build</id>
+			<build>
+				<!-- Build the docker image and Kubernetes manifest YML. -->
+				<defaultGoal>clean install docker:build fabric8:json</defaultGoal>
+			</build>
+		</profile>
+		<profile>
+			<id>f8-deploy</id>
+			<build>
+				<!-- Build the docker image and deploy to a remote docker registry; then deploy the application to Kubernetes -->
+				<defaultGoal>clean install docker:build docker:push fabric8:json fabric8:apply</defaultGoal>
+			</build>
+			<properties>
+				<fabric8.recreate>true</fabric8.recreate>
+				<fabric8.imagePullPolicySnapshot>Always</fabric8.imagePullPolicySnapshot>
+			</properties>
+		</profile>
+		<profile>
+			<id>f8-local-deploy</id>
+			<build>
+				<!-- Build the docker image, generate the Kubernetes manifest.yml, and deploy to a locally running Kubernetes -->
+				<defaultGoal>clean install docker:build fabric8:json fabric8:apply</defaultGoal>
+			</build>
+			<properties>
+				<fabric8.recreate>true</fabric8.recreate>
+			</properties>
+		</profile>
+	</profiles>
 
 	<dependencies>
 		<dependency>
@@ -89,49 +93,49 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
-        <groupId>io.fabric8</groupId>
-        <artifactId>docker-maven-plugin</artifactId>
-        <version>0.14.2</version>
-        <configuration>
-          <images>
-            <image>
-              <name>${docker.image}</name>
-              <build>
-                <from>${docker.from}</from>
-                <assembly>
-                  <basedir>/app</basedir>
-                  <descriptorRef>${docker.assemblyDescriptorRef}</descriptorRef>
-                </assembly>
-                <env>
-                  <JAR>${project.artifactId}-${project.version}.war</JAR>
-                  <JAVA_OPTIONS>-Djava.security.egd=/dev/./urandom</JAVA_OPTIONS>
-                </env>
-              </build>
-            </image>
-          </images>
-        </configuration>
-      </plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.14.2</version>
+				<configuration>
+					<images>
+						<image>
+							<name>${docker.image}</name>
+							<build>
+								<from>${docker.from}</from>
+								<assembly>
+									<basedir>/app</basedir>
+									<descriptorRef>${docker.assemblyDescriptorRef}</descriptorRef>
+								</assembly>
+								<env>
+									<JAR>${project.artifactId}-${project.version}.war</JAR>
+									<JAVA_OPTIONS>-Djava.security.egd=/dev/./urandom</JAVA_OPTIONS>
+								</env>
+							</build>
+						</image>
+					</images>
+				</configuration>
+			</plugin>
 			<plugin>
-        <groupId>io.fabric8</groupId>
-        <artifactId>fabric8-maven-plugin</artifactId>
-        <version>2.2.100</version>
-        <executions>
-          <execution>
-            <id>json</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>json</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>attach</id>
-            <phase>package</phase>
-            <goals>
-              <goal>attach</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>fabric8-maven-plugin</artifactId>
+				<version>2.2.100</version>
+				<executions>
+					<execution>
+						<id>json</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>json</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>attach</id>
+						<phase>package</phase>
+						<goals>
+							<goal>attach</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
