@@ -1,1 +1,32 @@
 mvn clean install spring-boot:run -Dserver.port=9090
+
+# to build the project and deploy it to local kubernetes
+	mvn -Pf8-local-deploy
+# to get the pods
+	oc get pod
+# to describe a specific pod
+	describe pod/hola-springboot-92xgj
+# to delete all the pieces of the hola-springboot project, namely to delete all objects matching 
+# the specified <label> "project", this will delete the service, the replication controller and the pods
+	oc delete all -l project=hola-springboot
+# to describe a service
+	oc describe svc hola-springboot
+	oc describe svc/backend
+# to describe the replication controller
+	oc describe rc hola-springboot
+	oc describe rc backend
+# to scale up the backend services in our cluster
+	oc scale rc/backend --replicas=3
+# to scale up the hola-springboot services in our cluster
+	oc scale rc/hola-springboot --replicas=3
+	
+ENVIRONMENT VARIABLES
+# the environment variables that we define are passed to the first pod created, to see the environment
+# variables in the pod you need to describe the pod and you will se the env variables of the pod
+	Environment Variables:
+      GREETING_BACKENDSERVICEHOST:	backend
+      GREETING_BACKENDSERVICEPORT:	80
+      GREETING_SAYING:			Hi from hola-springboot microservice built using Spring Boot
+# the when you scale the service (in this case hola-springboot) all the pods scaled will have those enviroment
+# variables, I think that those environment variables are inside the image of the microservice beside being in
+# the pod
