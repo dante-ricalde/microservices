@@ -23,19 +23,26 @@ public class GreeterRestController {
 	private String backendServiceHost;
 
 	private int backendServicePort;
-	
+
 	@PostConstruct
 	public void init() {
-		saying += " from cluster hola-springboot at host: "+ getIp();
+		saying += " from cluster hola-springboot at host: " + getIp();
 	}
 
 	@RequestMapping(value = "/greeting", method = RequestMethod.GET, produces = "text/plain")
 	public String greeting() {
 		String backendServiceUrl = String.format("http://%s:%d/api/backend?greeting={greeting}", backendServiceHost,
 				backendServicePort);
-//		System.out.println("Sending to: " + backendServiceUrl);		
-		BackendDTO response = template.getForObject(backendServiceUrl, BackendDTO.class, saying);		
-//		return backendServiceUrl;
+		// System.out.println("Sending to: " + backendServiceUrl);
+		BackendDTO response = template.getForObject(backendServiceUrl, BackendDTO.class, saying);
+		// return backendServiceUrl;
+		return response.getGreeting() + " at host: " + response.getIp();
+	}
+
+	@RequestMapping(value = "/greeting-hystrix", method = RequestMethod.GET, produces = "text/plain")
+	public String greetingHystrix() {
+		BackendCommand backendCommand = new BackendCommand(backendServiceHost, backendServicePort).withSaying(saying).withTemplate(template);
+		BackendDTO response = backendCommand.execute();
 		return response.getGreeting() + " at host: " + response.getIp();
 	}
 
@@ -62,15 +69,15 @@ public class GreeterRestController {
 	public void setBackendServicePort(int backendServicePort) {
 		this.backendServicePort = backendServicePort;
 	}
-	
+
 	private String getIp() {
-        String hostname = null;
-        try {
-            hostname = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-            hostname = "unknown";
-        }
-        return hostname;
-    }
+		String hostname = null;
+		try {
+			hostname = InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {
+			hostname = "unknown";
+		}
+		return hostname;
+	}
 
 }

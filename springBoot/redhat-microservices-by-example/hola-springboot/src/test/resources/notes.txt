@@ -19,6 +19,11 @@ mvn clean install spring-boot:run -Dserver.port=9090
 	oc scale rc/backend --replicas=3
 # to scale up the hola-springboot services in our cluster
 	oc scale rc/hola-springboot --replicas=3
+# to test the app
+	http://hola-springboot-microservice-book.192.168.42.148.nip.io/api/greeting
+	This is the hostname (Route/Node) create for the service hola-springboot
+# The cluster IP of the service hola-springboot is, you can retrieve by (oc describe svc/hola-springboot)
+	172.30.32.165
 	
 ENVIRONMENT VARIABLES
 # the environment variables that we define are passed to the first pod created, to see the environment
@@ -30,3 +35,42 @@ ENVIRONMENT VARIABLES
 # the when you scale the service (in this case hola-springboot) all the pods scaled will have those enviroment
 # variables, I think that those environment variables are inside the image of the microservice beside being in
 # the pod
+
+# to expose	a pod locally to be able to communicate with the pod over our localhost port 9000 for debugging.
+	oc port-forward -p hola-springboot-76p54 9000:8080 (this technique works great even across a
+	remote Kubernetes cluster, not just on our local CDK)
+	to test it:
+	* http://localhost:9000/api/hola
+	In this case the pod hola-springboot-76p54 is running in the IP: 172.17.0.3 and when We test the endpoint /api/hola 
+	of the app we get the same IP in the response (Guten Tag aus 172.17.0.3)
+	
+	* http://localhost:9000/api/greeting
+		Response: Hi from hola-springboot microservice built using Spring Boot from cluster hola-springboot at 
+		host: 172.17.0.3 from cluster Backend at host: 172.17.0.8
+	This /api/greeting API calls our backend and We can see that the backend pod returns its IP address (172.17.0.8) 
+	in this call! So our service was discovered correctly, and all it took was a little bit of DNS and the power of 
+	Kubernetes service discovery. Using Kubernetes cluster DNS provides a technology-agnostic way of doing basic 
+	service discovery!
+		
+# The “readiness” quality of the hola-springboot pod will be determined by periodically polling the /health endpoint 
+of our pod (This is done by Kubernetes). 
+When we added the actuator to our Spring Boot microservice earlier, a /health endpoint was added which returns:
+	{
+	"diskSpace": {
+	"free": 106880393216,
+	Fault Tolerance
+	|
+	103"status": "UP",
+	"threshold": 10485760,
+	"total": 107313364992
+	},
+	"status": "UP"
+	}
+	namely, its necessary to add the actuator to add the /healt endpoint and then add the readiness probe to our kubernetes
+	manifest, this is added automatically by adding the following Maven properties to the respective pom.xml (these were
+	added automatically using the fabric8-setup command)
+	
+	<fabric8.readinessProbe.httpGet.path>/health</fabric8.readinessProbe.httpGet.path>
+	<fabric8.readinessProbe.httpGet.port>8080</fabric8.readinessProbe.httpGet.port>
+	<fabric8.readinessProbe.initialDelaySeconds>5</fabric8.readinessProbe.initialDelaySeconds>
+	<fabric8.readinessProbe.timeoutSeconds>30</fabric8.readinessProbe.timeoutSeconds>
