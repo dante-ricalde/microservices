@@ -7,7 +7,7 @@
 	<artifactId>backend</artifactId>
 	<version>1.0</version>
 	<packaging>war</packaging>
-	
+
 	<name>backend</name>
 	<description>Demo project for backend</description>
 
@@ -20,24 +20,24 @@
 		<servlet-version>2.5</servlet-version>
 		<jackson-version>2.6.3</jackson-version>
 		<fabric8.version>3.5.9</fabric8.version>
-		<fabric8.docker.maven.plugin.version>0.22.0</fabric8.docker.maven.plugin.version>		
-		
-		<!-- Docker-->
-	    <docker.from>fabric8/tomcat-8.0</docker.from>
-	    <docker.image>${fabric8.dockerUser}${project.artifactId}:${project.version}</docker.image>
-	    <docker.assemblyDescriptorRef>rootWar</docker.assemblyDescriptorRef>
-	    <docker.port.container.jolokia>8778</docker.port.container.jolokia>
-	    <docker.port.container.http>${jetty.http.port}</docker.port.container.http>
+		<fabric8.docker.maven.plugin.version>0.22.0</fabric8.docker.maven.plugin.version>
 
-		
-		<!-- Fabric8/Kubernetes/OpenShift-->
-	    <fabric8.dockerUser>fabric8/</fabric8.dockerUser>
-	    <fabric8.service.name>${project.artifactId}</fabric8.service.name>
-	    <fabric8.service.port>80</fabric8.service.port>
-	    <fabric8.service.containerPort>${jetty.http.port}</fabric8.service.containerPort>
-	    <fabric8.service.type>LoadBalancer</fabric8.service.type>
+		<!-- Docker -->
+		<docker.from>fabric8/tomcat-8.0</docker.from>
+		<docker.image>${fabric8.dockerUser}${project.artifactId}:${project.version}</docker.image>
+		<docker.assemblyDescriptorRef>rootWar</docker.assemblyDescriptorRef>
+		<docker.port.container.jolokia>8778</docker.port.container.jolokia>
+		<docker.port.container.http>${jetty.http.port}</docker.port.container.http>
+
+
+		<!-- Fabric8/Kubernetes/OpenShift -->
+		<fabric8.dockerUser>fabric8/</fabric8.dockerUser>
+		<fabric8.service.name>${project.artifactId}</fabric8.service.name>
+		<fabric8.service.port>80</fabric8.service.port>
+		<fabric8.service.containerPort>${jetty.http.port}</fabric8.service.containerPort>
+		<fabric8.service.type>LoadBalancer</fabric8.service.type>
 	</properties>
-	
+
 	<profiles>
 		<profile>
 			<id>f8-build</id>
@@ -49,7 +49,8 @@
 		<profile>
 			<id>f8-deploy</id>
 			<build>
-				<!-- Build the docker image and deploy to a remote docker registry; then deploy the application to Kubernetes -->
+				<!-- Build the docker image and deploy to a remote docker registry; then 
+					deploy the application to Kubernetes -->
 				<defaultGoal>clean install docker:build docker:push fabric8:json fabric8:apply</defaultGoal>
 			</build>
 			<properties>
@@ -60,7 +61,8 @@
 		<profile>
 			<id>f8-local-deploy</id>
 			<build>
-				<!-- Build the docker image, generate the Kubernetes manifest.yml, and deploy to a locally running Kubernetes -->
+				<!-- Build the docker image, generate the Kubernetes manifest.yml, and 
+					deploy to a locally running Kubernetes -->
 				<defaultGoal>clean install docker:build fabric8:json fabric8:apply</defaultGoal>
 			</build>
 			<properties>
@@ -112,12 +114,12 @@
 							<build>
 								<from>${docker.from}</from>
 								<assembly>
-<!-- 									<basedir>/app</basedir> -->
+									<!-- <basedir>/app</basedir> -->
 									<descriptorRef>${docker.assemblyDescriptorRef}</descriptorRef>
 								</assembly>
 								<env>
-<!-- 									<JAR>${project.artifactId}-${project.version}.war</JAR> -->
-<!-- 									<JAVA_OPTIONS>-Djava.security.egd=/dev/./urandom</JAVA_OPTIONS> -->
+									<!-- <JAR>${project.artifactId}-${project.version}.war</JAR> -->
+									<!-- <JAVA_OPTIONS>-Djava.security.egd=/dev/./urandom</JAVA_OPTIONS> -->
 									<CATALINA_OPTS>-javaagent:/opt/tomcat/jolokia-agent.jar=host=0.0.0.0,port=8778</CATALINA_OPTS>
 								</env>
 							</build>

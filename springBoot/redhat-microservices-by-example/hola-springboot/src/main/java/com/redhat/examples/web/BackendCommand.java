@@ -5,6 +5,9 @@ import org.springframework.web.client.RestTemplate;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandProperties;
+import com.netflix.hystrix.HystrixThreadPoolProperties;
+
+
 
 public class BackendCommand extends HystrixCommand<BackendDTO> {
 
@@ -18,6 +21,10 @@ public class BackendCommand extends HystrixCommand<BackendDTO> {
 
 	public BackendCommand(String host, int port) {
 		super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("springboot.backend"))
+				.andThreadPoolPropertiesDefaults(
+						HystrixThreadPoolProperties.Setter()
+						.withCoreSize(10)
+						.withMaxQueueSize(-1))
 				.andCommandPropertiesDefaults(
 						HystrixCommandProperties.Setter()
 						.withCircuitBreakerEnabled(true)

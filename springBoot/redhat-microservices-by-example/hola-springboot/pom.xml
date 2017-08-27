@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.redhat.examples</groupId>
@@ -20,11 +21,11 @@
 		<!-- Project -->
 		<java.version>1.8</java.version>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-<!-- 		<fabric8.version>3.5.9</fabric8.version> -->
+		<!-- <fabric8.version>3.5.9</fabric8.version> -->
 		<fabric8.version>2.3.4</fabric8.version>
 		<fabric8.docker.maven.plugin.version>0.22.0</fabric8.docker.maven.plugin.version>
-		<hystrix.version>1.5.9</hystrix.version>
-	
+		<hystrix.version>1.5.12</hystrix.version>
+
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<docker.assemblyDescriptorRef>artifact</docker.assemblyDescriptorRef>
 		<docker.from>docker.io/fabric8/java-jboss-openjdk8-jdk:1.0.10</docker.from>
@@ -42,7 +43,8 @@
 		<fabric8.service.type>LoadBalancer</fabric8.service.type>
 		<fabric8.env.GREETING_BACKENDSERVICEHOST>backend</fabric8.env.GREETING_BACKENDSERVICEHOST>
 		<fabric8.env.GREETING_BACKENDSERVICEPORT>80</fabric8.env.GREETING_BACKENDSERVICEPORT>
-		<fabric8.env.GREETING_SAYING>Hi from hola-springboot microservice built using Spring Boot</fabric8.env.GREETING_SAYING>
+		<fabric8.env.GREETING_SAYING>Hi from hola-springboot microservice
+			built using Spring Boot</fabric8.env.GREETING_SAYING>
 	</properties>
 
 	<profiles>
@@ -56,7 +58,8 @@
 		<profile>
 			<id>f8-deploy</id>
 			<build>
-				<!-- Build the docker image and deploy to a remote docker registry; then deploy the application to Kubernetes -->
+				<!-- Build the docker image and deploy to a remote docker registry; then 
+					deploy the application to Kubernetes -->
 				<defaultGoal>clean install docker:build docker:push fabric8:json fabric8:apply</defaultGoal>
 			</build>
 			<properties>
@@ -67,7 +70,8 @@
 		<profile>
 			<id>f8-local-deploy</id>
 			<build>
-				<!-- Build the docker image, generate the Kubernetes manifest.yml, and deploy to a locally running Kubernetes -->
+				<!-- Build the docker image, generate the Kubernetes manifest.yml, and 
+					deploy to a locally running Kubernetes -->
 				<defaultGoal>clean install docker:build fabric8:json fabric8:apply</defaultGoal>
 			</build>
 			<properties>
@@ -75,22 +79,22 @@
 			</properties>
 		</profile>
 		<profile>
-      <id>kit</id>
-      <activation />
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-failsafe-plugin</artifactId>
-            <version>2.19</version>
-            <configuration>
-              <includes>
-                <include>**/*KT.*</include>
-              </includes>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
+			<id>kit</id>
+			<activation />
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>2.19</version>
+						<configuration>
+							<includes>
+								<include>**/*KT.*</include>
+							</includes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 
 	<dependencies>
@@ -103,12 +107,18 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.netflix.hystrix</groupId>
 			<artifactId>hystrix-core</artifactId>
 			<version>${hystrix.version}</version>
 		</dependency>
+		
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.apache.commons</groupId> -->
+<!-- 			<artifactId>commons-configuration2</artifactId> -->
+<!-- 			<version>2.0</version> -->
+<!-- 		</dependency> -->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -117,22 +127,27 @@
 		</dependency>
 
 		<dependency>
-      <groupId>io.fabric8</groupId>
-      <artifactId>fabric8-arquillian</artifactId>
-      <scope>test</scope>
-    </dependency>
+			<groupId>io.fabric8</groupId>
+			<artifactId>fabric8-arquillian</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>io.fabric8</groupId>
-        <artifactId>fabric8-arquillian</artifactId>
-        <version>2.2.199</version>
-        <scope>test</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>io.fabric8</groupId>
+				<artifactId>fabric8-arquillian</artifactId>
+				<version>2.2.199</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>commons-configuration</groupId>
+				<artifactId>commons-configuration</artifactId>
+				<version>1.10</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<plugins>
