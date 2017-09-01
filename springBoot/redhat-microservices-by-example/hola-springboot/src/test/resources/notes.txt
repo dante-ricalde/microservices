@@ -22,6 +22,10 @@ mvn clean install spring-boot:run -Dserver.port=9090
 # to test the app
 	http://hola-springboot-microservice-book.192.168.42.148.nip.io/api/greeting
 	This is the hostname (Route/Node) create for the service hola-springboot
+
+	another way to get the app is http://192.168.42.148:31040/api/greeting using the another port, if you have scale the service to 3 (oc scale rc/hola-springboot --replicas=3),
+	you would retrieve the response from ips:172.17.0.5, 172.17.0.4 y 172.17.0.6 por example if we have these ips for our 3 pods resulted from scaling our service
+	
 # The cluster IP of the service hola-springboot is, you can retrieve by (oc describe svc/hola-springboot)
 	172.30.32.165
 	
@@ -74,3 +78,26 @@ When we added the actuator to our Spring Boot microservice earlier, a /health en
 	<fabric8.readinessProbe.httpGet.port>8080</fabric8.readinessProbe.httpGet.port>
 	<fabric8.readinessProbe.initialDelaySeconds>5</fabric8.readinessProbe.initialDelaySeconds>
 	<fabric8.readinessProbe.timeoutSeconds>30</fabric8.readinessProbe.timeoutSeconds>
+
+	
+Error:
+
+	Message: Forbidden!Configured service account doesn't have access. Service account may have been revoked
+
+		The README should be updated to specify that a role must bne added to the client on Openshift
+
+		oc policy add-role-to-user view -n $(oc project -q) -z default
+		otherwise, the Fabric8 Kubernetes client can't discover the services
+
+		io.fabric8.kubernetes.client.KubernetesClientException: Failure executing: GET at: https://kubernetes.default.svc/api/v1/namespaces/test/pods/spring-boot-ribbon-1-3gu7z. Message: Forbidden!Configured service account doesn't have access. Service account may have been revoked..
+			at io.fabric8.kubernetes.client.dsl.base.OperationSupport.requestFailure(OperationSupport.java:319) ~[kubernetes-client-1.4.35.jar!/:na]
+			at io.fabric8.kubernetes.client.dsl.base.OperationSupport.assertResponseCode(OperationSupport.java:266) ~[kubernetes-client-1.4.35.jar!/:na]
+			at io.fabric8.kubernetes.client.dsl.base.OperationSupport.handleResponse(OperationSupport.java:237) ~[kubernetes-client-1.4.35.jar!/:na]
+			at io.fabric8.kubernetes.client.dsl.base.OperationSupport.handleResponse(OperationSupport.java:230) ~[kubernetes-client-1.4.35.jar!/:na]
+			at io.fabric8.kubernetes.client.dsl.base.OperationSupport.handleGet(OperationSupport.java:226) ~[kubernetes-client-1.4.35.jar!/:na]
+			at io.fabric8.kubernetes.client.dsl.base.BaseOperation.handleGet(BaseOperation.java:686) ~[kubernetes-client-1.4.35.jar!/:na]
+			
+	When you execute the command, you will get 
+		role "view" added: "default"
+		This means the role "view" has been added to the serviceAccount "default"
+		you can also get the service accounts by: oc get serviceAccounts

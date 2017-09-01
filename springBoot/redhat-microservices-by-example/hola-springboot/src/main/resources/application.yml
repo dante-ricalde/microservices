@@ -4,3 +4,6 @@ management.security.enabled: false
 greeting.saying: Hola Spring Boot
 greeting.backendServiceHost: localhost
 greeting.backendServicePort: 8080
+
+#logging.level.com.redhat.examples: DEBUG
+logging.file: hola-springboot.log
