@@ -2,6 +2,7 @@ package com.redhat.examples.web;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 
 import javax.annotation.PostConstruct;
 
@@ -19,8 +20,12 @@ import com.netflix.client.config.DefaultClientConfigImpl;
 import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.ILoadBalancer;
 import com.netflix.loadbalancer.LoadBalancerBuilder;
+import com.netflix.loadbalancer.Server;
+import com.netflix.loadbalancer.reactive.LoadBalancerCommand;
+import com.netflix.loadbalancer.reactive.ServerOperation;
 
 import io.fabric8.kubeflix.ribbon.KubernetesServerList;
+import rx.Observable;
 
 @RestController
 @RequestMapping("/api")
@@ -49,7 +54,7 @@ public class GreeterRestController {
 	@PostConstruct
 	public void init() {
 		saying += " from cluster hola-springboot at host: " + getIp();
-		System.out.println("Value of USE_KUBERNETES_DISCOVERY: " + useKubernetesDiscovery);
+		logger.debug("Value of USE_KUBERNETES_DISCOVERY: " + useKubernetesDiscovery);
 		this.config = new DefaultClientConfigImpl();
 		this.config.loadProperties("backend");
 		if (Boolean.valueOf(useKubernetesDiscovery)) {
@@ -77,7 +82,29 @@ public class GreeterRestController {
 	
 	@GetMapping(value = "/greeting-ribbon", produces = "text/plain")
 	public String greetingRibbon() {
-		return null;
+		if (loadBalancer == null) {
+			logger.debug("Using a static list for ribbon");
+			Server server = new Server(backendServiceHost, backendServicePort);
+			loadBalancer = LoadBalancerBuilder.newBuilder().buildFixedServerListLoadBalancer(Arrays.asList(server));
+		}
+		logger.debug("Using ribbon for load balancing..");
+		BackendDTO backendDto = LoadBalancerCommand.<BackendDTO>builder().withLoadBalancer(loadBalancer).build().submit(new ServerOperation<BackendDTO>() {
+			
+			@Override
+			public Observable<BackendDTO> call(Server server) {
+				// TODO Auto-generated method stub
+				// I think hystrix shouldn't be used in this point, because in this point is calling directly to the server chosen by the load balancer,
+				// namely directly to the pod and the hystrix should be used when calling to the service so that the balance and discovered to be done by
+				// kubernetes. Hystrix should be outside of LoadBalancerCommand.<BackendDTO>builder().withLoadBalancer ...
+//				BackendCommand backendCommand = new BackendCommand(server.getHost(), server.getPort()).withSaying(saying).withTemplate(template);
+//				return Observable.<BackendDTO>just(backendCommand.execute());
+				logger.debug("Calling to backend at host: '{}' and port '{}' using ribbon", server.getHost(), server.getPort());
+				String backendServiceUrl = String.format("http://%s:%d/api/backend?greeting={greeting}", server.getHost(), server.getPort());
+				// System.out.println("Sending to: " + backendServiceUrl);
+				return Observable.<BackendDTO>just(template.getForObject(backendServiceUrl, BackendDTO.class, saying));
+			}
+		}).toBlocking().first();
+		return backendDto.getGreeting() + " at host: " + backendDto.getIp();
 	}
 
 	public String getSaying() {
