@@ -101,3 +101,37 @@ Error:
 		role "view" added: "default"
 		This means the role "view" has been added to the serviceAccount "default"
 		you can also get the service accounts by: oc get serviceAccounts
+		
+TESTING USING JMETER
+	Jmeter stress test to a docker swarm cluster (part 1 - console monitor)
+	
+command to execute tests:
+
+	apache-jmeter-3.2/bin/jmeter -n -t microservices/springBoot/redhat-microservices-by-example/hola-springboot/src/test/resources/jmeterConfigTest.jmx -l microservices/springBoot/redhat-microservices-by-example/hola-springboot/src/test/resources/result.jtl -e -o microservices/springBoot/redhat-microservices-by-example/hola-springboot/src/test/resources/dashboard/
+	
+theory to generate report dashboard in jmeter
+
+
+	If you already have a .jtl result file you can do it like:
+
+	jmeter -g /path/to/jtl/file -o /where/you/want/to/store/dashboard
+	If you would like the dashboard to be generated after the test run, you can run JMeter in command-line non-GUI mode like:
+
+	jmeter -n -t /path/to/testplan -l /path/to/result.jtl -e -o /path/to/dashboard/folder
+	
+	See Full list of command-line options for all possible JMeter command-line arguments listed and explained.
+	http://jmeter.apache.org/usermanual/get-started.html#options
+
+	If above steps don't work - add the next lines to user.properties file (lives under "bin" folder of your JMeter installation)
+
+	jmeter.save.saveservice.bytes=true
+	jmeter.save.saveservice.label=true
+	jmeter.save.saveservice.latency=true
+	jmeter.save.saveservice.response_code=true
+	jmeter.save.saveservice.response_message=true
+	jmeter.save.saveservice.successful=true
+	jmeter.save.saveservice.thread_counts=true
+	jmeter.save.saveservice.thread_name=true
+	jmeter.save.saveservice.time=true
+	jmeter.save.saveservice.timestamp_format=ms
+	jmeter.save.saveservice.timestamp_format=yyyy/MM/dd HH:mm:ss
