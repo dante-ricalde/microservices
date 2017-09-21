@@ -1,0 +1,2 @@
+#spring boot actuator
+management.security.enabled: false
