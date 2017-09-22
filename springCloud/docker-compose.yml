@@ -1,0 +1,8 @@
+version: '2'
+services:
+  config-client-test:
+    image:  dantericalde/config-client-test
+    depends_on:
+      - config-server-test
+  config-server-test:
+    image:  dantericalde/config-server-test

@@ -5,7 +5,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/spring-cloud-samples/config-repo
+          uri: https://github.com/dante-ricalde/config-repo
           
 #spring boot actuator
 management.security.enabled: false
