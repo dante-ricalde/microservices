@@ -5,6 +5,9 @@ ENV SLEEP=2
 # add directly the jar
 ADD *.jar /app.jar
 
+COPY wait-for-config-server.sh .
+RUN chmod a+x wait-for-config-server.sh
+
 # EXPOSE 8080 5701/udp
 CMD echo "The application will start in ${SLEEP}s..." && \
 	sleep ${SLEEP} && \

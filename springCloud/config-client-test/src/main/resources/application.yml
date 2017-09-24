@@ -1,2 +1,3 @@
 #spring boot actuator
 management.security.enabled: false
+# I need to configure hostname in docker

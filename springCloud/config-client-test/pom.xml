@@ -4,38 +4,29 @@
 
 	<groupId>com.spring.cloud.config.client</groupId>
 	<artifactId>config-client-test</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>config-client-test</name>
 	<url>http://maven.apache.org</url>
 	
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.6.RELEASE</version>
+		<groupId>com.spring.cloud.config</groupId>
+		<artifactId>springCloud</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
-		<docker.image.prefix>dantericalde</docker.image.prefix>
-		<docker-maven-plugin.version>1.0.0</docker-maven-plugin.version>
+		<docker.image.name>config-client-test</docker.image.name>
 	</properties>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-config</artifactId>
-<!-- 				<version>1.4.0.BUILD-SNAPSHOT</version> -->
-				<version>1.3.2.RELEASE</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 
 	<dependencies>
 		<dependency>
@@ -50,54 +41,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
-	
-	<build>
-		<finalName>${artifactId}-${version}-jar-with-dependencies</finalName>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<!-- builds docker image with hazelcast client app and dependencies -->
-				<groupId>com.spotify</groupId>
-				<artifactId>docker-maven-plugin</artifactId>
-				<version>${docker-maven-plugin.version}</version>
-				<configuration>
-					<imageName>${docker.image.prefix}/config-client-test</imageName>
-					<dockerDirectory>src/main/docker</dockerDirectory>
-
-					<!-- override tags every time image is built with docker:build -->
-					<forceTags>true</forceTags>
-					<imageTags>
-						<imageTag>${project.version}</imageTag>
-						<imageTag>latest</imageTag>
-					</imageTags>
-
-					<!-- You should do this in deploy phase or use -DskipDockerPush -->
-					<serverId>docker-hub</serverId>
-					<registryUrl>https://hub.docker.com/</registryUrl>
-					<noCache>true</noCache>
-
-					<resources>
-						<resource>
-							<targetPath>/</targetPath><!-- It's target/docker -->
-							<directory>${project.build.directory}</directory>
-							<include>${project.build.finalName}.jar</include>
-						</resource>
-					</resources>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-
 
 	<repositories>
 		<repository>

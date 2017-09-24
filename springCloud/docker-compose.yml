@@ -1,8 +1,14 @@
 version: '2'
 services:
   config-client-test:
+    hostname: config-client-test
     image:  dantericalde/config-client-test
     depends_on:
       - config-server-test
+    command: ["./wait-for-config-server.sh", "java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom -jar /app.jar"]
+    links:
+      - config-server-test:config-server-test
   config-server-test:
+    hostname: config-server-test
     image:  dantericalde/config-server-test
+    #container_name: config-server-test

@@ -1,3 +1,4 @@
+debug: true
 spring.config.name: configserver
 server.port: 8888
 spring:
