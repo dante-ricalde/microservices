@@ -5,8 +5,8 @@ to kill a docker container:
 docker kill springcloud_config-server-test_1
 
 Observations:
-When a client is started it connects to the config server to bring all the configuration from the git hub repository.
-When a client is started all the properties referenced by @Value are resolved and if you stop the server config...and you try to
+When a client is started it connects to the config server to bring all the configuration from config server and the git hub repository.
+When a client is started all the properties referenced by @Value are resolved and if you stop the server config server...and you try to
 recover a property from @Autowired private org.springframework.core.env.Environment environment object you can recover the property
 because the property is brought from the git hub repo and that configuration is known by the client besides the config server is
 down...you can scale the config server of course ...but I think that is going to be useful when you have a webhook to receive
