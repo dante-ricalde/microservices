@@ -1,0 +1,48 @@
+#spring boot actuator
+management.security.enabled: false
+endpoints.loggers.enabled: false
+
+server:
+  port: 8888
+  
+management:
+  context-path: /admin
+  
+logging:
+  level:
+    com.netflix.discovery: 'ON'
+    org.springframework.cloud: 'DEBUG'
+    
+eureka:
+  instance:   
+#   * Indicates how often (in seconds) the eureka client needs to send heartbeats to
+#   * eureka server to indicate that it is still alive. If the heartbeats are not
+#   * received for the period specified in leaseExpirationDurationInSeconds, eureka
+#   * server will remove the instance from its view, there by disallowing traffic to this
+#   * instance.
+#   *
+#   * Note that the instance could still not take traffic if it implements
+#   * HealthCheckCallback and then decides to make itself unavailable.   
+    leaseRenewalIntervalInSeconds: 10
+    statusPageUrlPath: /admin/info
+    healthCheckUrlPath: /admin/health
+    
+
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/dante-ricalde/config-repo
+          basedir: target/config
+---
+spring:
+  profiles: cloud
+eureka:
+  password: password
+  instance:
+    hostname: ${vcap.application.uris[0]}
+    nonSecurePort: 80
+  client:
+    serviceUrl:
+      defaultZone: ${vcap.services.${PREFIX:}eureka.credentials.uri:http://user:${eureka.password:}@${PREFIX:}eureka.${application.domain:cfapps.io}}/eureka/
