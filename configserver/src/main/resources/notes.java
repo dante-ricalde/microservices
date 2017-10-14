@@ -23,3 +23,14 @@ Observations:
 	
 	For an issue of time I have avoid this version of spring boot 2.0.0.M4 to avoid configuring all these things, instead I have used
 	spring boot 2.0.0.M2 (until this version spring actuator has not suffered changes)
+
+NOTIFICATIONS AND SPRING CLOUD BUS: WEBHOOK
+
+I have configured the webhook in my config-repo git hub repository with the Payload URL:
+	http://c707c0df.ngrok.io/monitor
+
+previously I had to expose my localhost to the internet by doing:
+	
+	dante@dante-HP-Pavilion-Notebook:~$ ./ngrok http 8888
+	the result was: 
+		Forwarding    http://c707c0df.ngrok.io -> 127.0.0.1:8888
