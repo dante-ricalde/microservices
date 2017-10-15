@@ -1,6 +1,0 @@
-I need to code StoreInitializer and then application.yml, bootstrap.yml and starbucks.csv to connect to connect to the
-config server, and then connect using the keystore to connect in a more secure way to the config server...
-Then I need to test how the changes made in the config-repo are sent using the webhook to the config server using the
-spring cloud bus and then how those changes are propagated to the client using RabbitMQ (the server will broadcast the message
-and the clients will liston to those messages and updates when a configuration change event is transmitted.
-Then continue with the Dockerfile
