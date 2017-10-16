@@ -4,3 +4,6 @@ Then I need to test how the changes made in the config-repo are sent using the w
 spring cloud bus and then how those changes are propagated to the client using RabbitMQ (the server will broadcast the message
 and the clients will liston to those messages and updates when a configuration change event is transmitted.
 Then continue with the Dockerfile
+
+I need to continue StoreInitializer at line
+lineMapper.setFieldSetMapper(StoreFieldSetMapper.INSTANCE);
