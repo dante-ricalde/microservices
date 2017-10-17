@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.apache.commons.io.FileUtils;
+import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.batch.item.file.transform.FieldSet;
+import org.springframework.batch.item.file.separator.DefaultRecordSeparatorPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.geo.Point;
@@ -34,6 +36,9 @@ public class StoreInitializer {
 			return;
 		}
 		List<Store> stores = readStores();
+		log.info("Importing {} stores into MongoDB...", stores.size());
+		repository.saveAll(stores);
+		log.info("Successfully imported {} stores.", repository.count());
 	}
 	
 	/**
@@ -60,10 +65,19 @@ public class StoreInitializer {
 		DefaultLineMapper<Store> lineMapper = new DefaultLineMapper<>();
 		lineMapper.setLineTokenizer(tokenizer);
 		lineMapper.setFieldSetMapper(StoreFieldSetMapper.INSTANCE);
-		
-		
+		itemReader.setLineMapper(lineMapper);
+		itemReader.setRecordSeparatorPolicy(new DefaultRecordSeparatorPolicy());
+		itemReader.setLinesToSkip(1);
+		itemReader.open(new ExecutionContext());
 		
 		List<Store> stores = new ArrayList<>();
+		Store store = null;
+		do {
+			store = itemReader.read();
+			if (store != null) {
+				stores.add(store);
+			}
+		} while (store != null);
 		
 		return stores;
 	}
