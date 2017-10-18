@@ -6,4 +6,5 @@ and the clients will liston to those messages and updates when a configuration c
 Then continue with the Dockerfile
 
 I need to continue StoreInitializer at line: lineMapper.setFieldSetMapper(StoreFieldSetMapper.INSTANCE); (100%)
-I need to continue with and application.yml
+I need to continue with application.yml (100%)
+I need to continue with bootstrap.yml (100%)
