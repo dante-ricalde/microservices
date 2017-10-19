@@ -35,7 +35,7 @@ public class StoreApp extends RepositoryRestConfigurerAdapter {
 	}
 	
 	@PostConstruct
-	public void exposeIds() {	
+	public void exposeIds() {
 	}
 	
 	public static void main(String[] args) {

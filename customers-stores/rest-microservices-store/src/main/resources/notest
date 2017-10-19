@@ -8,3 +8,4 @@ Then continue with the Dockerfile
 I need to continue StoreInitializer at line: lineMapper.setFieldSetMapper(StoreFieldSetMapper.INSTANCE); (100%)
 I need to continue with application.yml (100%)
 I need to continue with bootstrap.yml (100%)
+I need to connect to my local config server wich points to my remote git account config-repo
