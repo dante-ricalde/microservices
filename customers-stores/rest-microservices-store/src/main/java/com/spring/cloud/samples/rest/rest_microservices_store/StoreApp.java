@@ -5,14 +5,20 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.Cloud;
 import org.springframework.cloud.CloudFactory;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
@@ -20,14 +26,25 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapt
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Hello world!
  *
  */
+@Configuration
+@EnableAutoConfiguration
 @SpringBootApplication
-@EnableDiscoveryClient
+@ComponentScan
+//@EnableDiscoveryClient
+@ConfigurationProperties
 public class StoreApp extends RepositoryRestConfigurerAdapter {
+	
+	@Value("${newValue}")
+    private String role;
+	
+	@Autowired
+	Environment environment;
 	
 	@Override
 	public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
@@ -42,8 +59,13 @@ public class StoreApp extends RepositoryRestConfigurerAdapter {
 		SpringApplication.run(StoreApp.class, args);
 	}
 	
-	@Controller
+	/*
+	@RefreshScope
+	@RestController
 	public static class SimpleStoresController {
+		
+		@Autowired
+		Environment environment;
 		
 		@Autowired
 		StoreRepository repository;
@@ -54,7 +76,8 @@ public class StoreApp extends RepositoryRestConfigurerAdapter {
 			Page<Store> all = repository.findAll(PageRequest.of(0, 10));
 			return all.getContent();
 		}
-	}
+		
+	}*/
 	
 	@Configuration
 	@Profile("cloud")

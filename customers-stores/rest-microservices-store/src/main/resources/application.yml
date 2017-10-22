@@ -12,27 +12,38 @@ endpoints:
     enabled: true
   health:
     sensitive: false
+  refresh:
+    enabled: true
+    
+spring.cloud.bus.refresh.enabled: true
+spring.cloud.bus.env.enabled: true
+endpoints.spring.cloud.bus.refresh.enabled: true
+endpoints.spring.cloud.bus.env.enabled: true
     
 spring:
   data:
     mongodb:
       uri:  ${vcap.services.${PREFIX:}mongodb.credentials.uri:mongodb://${MONGODB_HOST:localhost}:${MONGODB_PORT:27017}/stores}
-    rabbitmq:
-      addresses:  ${vcap.services.${PREFIX:}rabbitmq.credentials.uri:amqp://${RABBITMQ_HOST:localhost}:${RABBITMQ_PORT:5672}}
+  rabbitmq:
+      #addresses:  ${vcap.services.${PREFIX:}rabbitmq.credentials.uri:amqp://${RABBITMQ_HOST:localhost}:${RABBITMQ_PORT:5672}}
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
       
-eureka:
-  instance:
-    leaseRenewalIntervalInSeconds:  10
-    metadataMap:
-      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
-      #appid: ${spring.application.instance_id:} # ""
-      #appname: ${spring.application.name} # "stores"
-      #port: ${server.port} # "8081"
-      #prefix: ${PREFIX:} # ""
-      #kk: ${vcap.application.instance_id:${spring.application.name}:${server.port:1}} # "stores:8081"
-      #kk1: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}} #"stores:8081"
-  client:
-    registryFetchIntervalSeconds: 5
+#eureka:
+#  instance:
+#    leaseRenewalIntervalInSeconds:  10
+#    metadataMap:
+#      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
+#      #appid: ${spring.application.instance_id:} # ""
+#      #appname: ${spring.application.name} # "stores"
+#      #port: ${server.port} # "8081"
+#      #prefix: ${PREFIX:} # ""
+#      #kk: ${vcap.application.instance_id:${spring.application.name}:${server.port:1}} # "stores:8081"
+#      #kk1: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}} #"stores:8081"
+#  client:
+#    registryFetchIntervalSeconds: 5
 
 logging:
   level:
