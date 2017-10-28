@@ -23,6 +23,8 @@ endpoints.spring.cloud.bus.env.enabled: true
 spring:
   data:
     mongodb:
+#      host: ${MONGODB_HOST:localhost}
+#      port: ${MONGODB_PORT:27017}
       uri:  ${vcap.services.${PREFIX:}mongodb.credentials.uri:mongodb://${MONGODB_HOST:localhost}:${MONGODB_PORT:27017}/stores}
   rabbitmq:
       #addresses:  ${vcap.services.${PREFIX:}rabbitmq.credentials.uri:amqp://${RABBITMQ_HOST:localhost}:${RABBITMQ_PORT:5672}}

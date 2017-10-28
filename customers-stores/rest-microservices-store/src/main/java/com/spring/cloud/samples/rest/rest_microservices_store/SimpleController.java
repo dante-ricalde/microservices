@@ -14,7 +14,7 @@ public class SimpleController {
 	@Autowired
 	Environment environment;
 	
-	@Value("${newValue}")
+	@Value("${newValue:}")
     private String role;
 	
 	@RequestMapping("/simple/newValue")

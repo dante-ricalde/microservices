@@ -5,8 +5,8 @@ endpoints.loggers.enabled: false
 server:
   port: 8888
   
-management:
-  context-path: /admin
+#management:
+#  context-path: /admin
   
 logging:
   level:

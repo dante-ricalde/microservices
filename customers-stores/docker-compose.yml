@@ -1,0 +1,15 @@
+version: '2'
+services:
+  stores:
+    hostname: stores
+    image:  dantericalde/stores
+#    depends_on:
+#      - config-server
+#    command: ["./wait-for-config-server.sh", "http://config-server:8888/env", "java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom -jar /app.jar"]
+#    command: ["./wait-for-config-server.sh", "http://127.0.0.1:8888/env", "java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom -jar /app.jar"]
+#    links:
+#      - config-server:config-server
+#  config-server:
+#    hostname: config-server
+#    image:  dantericalde/config-server
+    #container_name: config-server-test
