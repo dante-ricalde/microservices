@@ -3,13 +3,46 @@ services:
   stores:
     hostname: stores
     image:  dantericalde/stores
-#    depends_on:
-#      - config-server
-#    command: ["./wait-for-config-server.sh", "http://config-server:8888/env", "java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom -jar /app.jar"]
+    depends_on:
+      - config-server
+      - mongodb
+      - rabbitmq
+#    network_mode: "host"
+    command: ["./wait-for-config-server.sh", "http://config-server:8888/env", "java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom -jar /app.jar"]
 #    command: ["./wait-for-config-server.sh", "http://127.0.0.1:8888/env", "java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom -jar /app.jar"]
-#    links:
-#      - config-server:config-server
-#  config-server:
-#    hostname: config-server
-#    image:  dantericalde/config-server
+    links:
+      - mongodb:mongo
+      - config-server:config-server
+      - rabbitmq:rabbit
+    environment:
+#      - config-server=config-server
+      - MONGODB_HOST=mongo
+      - RABBITMQ_HOST=rabbit
+  config-server:
+    hostname: config-server
+    image:  dantericalde/config-server
+    depends_on:
+      - rabbitmq
     #container_name: config-server-test
+#    environment:
+#      - config-server=config-server
+#      - DB_PORT=tcp://172.17.0.5:5432
+    links:
+      - rabbitmq:rabbit
+    
+  mongodb:
+    image:  mongo
+    container_name: mongo
+    ports:
+      - 27017
+    hostname: mongo
+    volumes:
+      - $HOME/mongo/data/db:/data/db
+      
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbit
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    hostname: rabbit

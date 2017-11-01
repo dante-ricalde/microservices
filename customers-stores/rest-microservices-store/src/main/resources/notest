@@ -8,4 +8,9 @@ Then continue with the Dockerfile
 I need to continue StoreInitializer at line: lineMapper.setFieldSetMapper(StoreFieldSetMapper.INSTANCE); (100%)
 I need to continue with application.yml (100%)
 I need to continue with bootstrap.yml (100%)
-I need to connect to my local config server wich points to my remote git account config-repo
+I need to connect to my local config server wich points to my remote git account config-repo (100%) - tested with several
+instances
+I need to do the previous using docker
+I need to increase the version of spring boot to 2.0.0.M3 and of spring cloud to Finchley.M2 to use Spring 5. I have tested
+this versions before...work in everything ok...but the config server and the client don't work with these versions, I think
+that I need to configure them another way
