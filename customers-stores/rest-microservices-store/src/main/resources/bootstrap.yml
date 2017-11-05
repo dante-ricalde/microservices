@@ -3,8 +3,10 @@ spring:
     name: stores
   cloud:
     config:
-      uri:  http://config-server:8888
-#       uri:  http://localhost:8888
+#      uri:  http://config-server:8888
+       uri:  http://localhost:8888
+       username: user
+       password: e0ca601e-d754-4aea-a0d0-ebb4a75ef388
   profiles:
     active: dev
 #encrypt:

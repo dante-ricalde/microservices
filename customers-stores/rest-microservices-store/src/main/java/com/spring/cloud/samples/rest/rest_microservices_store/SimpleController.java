@@ -17,9 +17,12 @@ public class SimpleController {
 	@Value("${newValue:}")
     private String role;
 	
+	@Value("${spring.datasource.kk.password:}")
+	private String password;
+	
 	@RequestMapping("/simple/newValue")
 	public String getNewValueFromConfigServer() {
-		return environment.getProperty("newValue") + role;
+		return environment.getProperty("newValue") + role + "password: " + password;
 	}
 
 }

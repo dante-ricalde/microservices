@@ -1,9 +1,15 @@
 spring:
   application:
     name: configserver
-#encrypt:
+  cloud:
+    config:
+      server:
+        encrypt:
+          enabled: false # this property need to be here in this bootstrap.yml
+encrypt:
 #  failOnError: false
-#  keyStore:
-#    location: classpath:keystore.jks
-#    password: ${KEYSTORE_PASSWORD:foobar} # don't use a default in production
-#    alias: test
+  keyStore:
+    location: classpath:/server.jks
+    password: ${KEYSTORE_PASSWORD:letmein} # don't use a default in production
+    alias: mytestkey
+    secret: changeme
